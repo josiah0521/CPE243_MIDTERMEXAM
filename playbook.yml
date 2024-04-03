@@ -1,0 +1,29 @@
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: Ubuntu Dpkg fix
+    shell: |
+      dpkg --configure -a
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Ubuntu updates
+    apt:
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Centos updates
+    yum:
+      update_cache: yes
+    when: ansible_distribution == "Centos"
+
+- hosts: Ubuntu
+  become: true
+  roles:
+     - role: ubuntu
+
+- hosts: CentOS
+  become: true
+  roles:
+     - role: centos
